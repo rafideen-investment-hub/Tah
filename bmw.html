@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم بوت الذهب الذكي</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0b0e11; color: #eaecef; margin: 0; padding: 20px; }
+        .dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .card { background: #151a22; padding: 20px; border-radius: 8px; border: 1px solid #2b3139; }
+        .gold-color { color: #f0b90b; }
+        .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #232a34; }
+        .signal-banner { padding: 15px; border-radius: 6px; text-align: center; font-size: 1.3rem; font-weight: bold; background: #232a34; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">شاشة تحليل الذهب الآلية <span class="gold-color">(XAUUSD)</span></h1>
+    <p style="text-align: center; color: #848e9c;">الفريم الحالي: 15 دقيقة | التحديث تلقائي كل 15 دقيقة</p>
+
+    <div class="dashboard">
+        <div class="card" style="height: 550px;">
+            <div id="gold-chart" style="height: 100%;"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="gold-color">📡 تقرير الذكاء الاصطناعي</h2>
+            <div id="signal" class="signal-banner">جاري الاتصال بالسيرفر المعالج...</div>
+
+            <h3>📍 مستويات الدعم والمقاومة</h3>
+            <div class="row"><span>المقاومة القوية (R2):</span> <strong id="r2" style="color: #f6465d;">--</strong></div>
+            <div class="row"><span>المقاومة الحالية (R1):</span> <strong id="r1">--</strong></div>
+            <div class="row"><span>الدعم الحالي (S1):</span> <strong id="s1">--</strong></div>
+            <div class="row"><span>الدعم القوي (S2):</span> <strong id="s2" style="color: #0ecb81;">--</strong></div>
+
+            <h3>💧 مستويات السيولة المستهدفة</h3>
+            <div class="row"><span>سيولة الشراء (BSL):</span> <span id="bsl" style="color: #4a90e2; font-weight: bold;">--</span></div>
+            <div class="row"><span>سيولة البيع (SSL):</span> <span id="ssl" style="color: #e2844a; font-weight: bold;">--</span></div>
+
+            <h3>🎯 التوقعات ونقاط الانعكاس</h3>
+            <div class="row"><span>منطقة الارتداد المتوقعة:</span> <span id="rebound">--</span></div>
+            <div class="row"><span>نسبة نجاح الصفقة:</span> <span id="accuracy" class="gold-color" style="font-weight: bold;">--</span></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // تشغيل الشارت المجاني للمنصة
+        new TradingView.widget({
+            "width": "100%", "height": "100%", "symbol": "FX_IDC:XAUUSD",
+            "interval": "15", "theme": "dark", "locale": "ar", "container_id": "gold-chart"
+        });
+
+        // ضع رابط الـ Render الخاص بك هنا بعد رفع السيرفر بنجاح
+        const API_URL = "http://127.0.0.1:8000/analyze"; 
+
+        async function startAnalysis() {
+            try {
+                let res = await fetch(API_URL);
+                let data = await res.json();
+                
+                document.getElementById('signal').innerText = "التوصية الحالية: " + data.signal;
+                document.getElementById('r2').innerText = "$" + data.r2;
+                document.getElementById('r1').innerText = "$" + data.r1;
+                document.getElementById('s1').innerText = "$" + data.s1;
+                document.getElementById('s2').innerText = "$" + data.s2;
+                document.getElementById('bsl').innerText = "$" + data.bsl;
+                document.getElementById('ssl').innerText = "$" + data.ssl;
+                document.getElementById('rebound').innerText = data.rebound;
+                document.getElementById('accuracy').innerText = data.accuracy;
+            } catch (err) {
+                console.error("خطأ في الاتصال بالخلفية البرمجية:", err);
+            }
+        }
+
+        startAnalysis();
+        // التكرار التلقائي كل 15 دقيقة (15 * 60 * 1000 مللي ثانية)
+        setInterval(startAnalysis, 15 * 60 * 1000);
+    </script>
+</body>
+</html>
