@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم بوت الذهب الذكي - Rafideen Investment Hub</title>
+    <style>
+        :root {
+            --bg-color: #0b0e11;
+            --card-bg: #151a22;
+            --text-color: #eaecef;
+            --primary-gold: #f0b90b;
+            --success-green: #0ecb81;
+            --danger-red: #f6465d;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #848e9c;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 20px; 
+        }
+        @media (max-width: 992px) {
+            .dashboard { grid-template-columns: 1fr; }
+        }
+        .card { 
+            background: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 8px; 
+            border: 1px solid #2b3139; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .gold-color { color: var(--primary-gold); }
+        .row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #232a34; 
+        }
+        .row:last-child { border-bottom: none; }
+        .signal-banner { 
+            padding: 18px; 
+            border-radius: 6px; 
+            text-align: center; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            background: #232a34; 
+            margin-bottom: 25px; 
+            transition: all 0.3s ease;
+        }
+        .buy-style { background-color: rgba(14, 203, 129, 0.15); color: var(--success-green); border: 1px solid var(--success-green); }
+        .sell-style { background-color: rgba(246, 70, 93, 0.15); color: var(--danger-red); border: 1px solid var(--danger-red); }
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--primary-gold);
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>شاشة تحليل الذهب الآلية <span class="gold-color">(XAUUSD)</span></h1>
+    <div class="subtitle">الفريم الحالي: 15 دقيقة | نظام تحليل ذكي مدمج ومحدث تلقائياً للذهب مقابل الدولار</div>
+
+    <div class="dashboard">
+        <div class="card" style="height: 580px; padding: 10px;">
+            <div id="gold-chart" style="height: 100%; width: 100%;"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="gold-color" style="margin-top: 0;">📡 تقرير الذكاء الاصطناعي للذهب</h2>
+            <div id="signal" class="signal-banner">جاري الاتصال بالسيرفر وجلب بيانات الذهب...</div>
+
+            <h3>📍 مستويات الدعم والمقاومة</h3>
+            <div class="row"><span>المقاومة القوية (R2):</span> <strong id="r2" style="color: var(--danger-red);">--</strong></div>
+            <div class="row"><span>المقاومة الحالية (R1):</span> <strong id="r1">--</strong></div>
+            <div class="row"><span>الدعم الحالي (S1):</span> <strong id="s1">--</strong></div>
+            <div class="row"><span>الدعم القوي (S2):</span> <strong id="s2" style="color: var(--success-green);">--</strong></div>
+
+            <h3>💧 مستويات السيولة المستهدفة لذهب (ICT)</h3>
+            <div class="row"><span>سيولة الشراء (BSL):</span> <span id="bsl" style="color: #4a90e2; font-weight: bold;">--</span></div>
+            <div class="row"><span>سيولة البيع (SSL):</span> <span id="ssl" style="color: #e2844a; font-weight: bold;">--</span></div>
+
+            <h3>🎯 التوقعات ونقاط الانعكاس</h3>
+            <div class="row"><span>منطقة الارتداد المتوقعة:</span> <span id="rebound" style="font-weight: 500;">--</span></div>
+            <div class="row"><span>نسبة نجاح الصفقة:</span> <span id="accuracy" class="gold-color" style="font-weight: bold;">--</span></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+    // 1. تشغيل الشارت المباشر لـ الذهب مقابل الدولار الأمريكي XAUUSD فريم 15 دقيقة
+    new TradingView.widget({
+        "width": "100%",
+        "height": "100%",
+        "symbol": "OANDA:XAUUSD", // تم تعديل الرمز هنا للذهب مقابل الدولار بدقة
+        "interval": "15",
+        "timezone": "Etc/UTC",
+        "theme": "dark",
+        "style": "1",
+        "locale": "ar",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "hide_side_toolbar": false,
+        "allow_symbol_change": false, // تثبيت الرمز على الذهب لمنع التشتيت
+        "container_id": "gold-chart"
+    });
+
+    // 2. ربط الـ HTML مع رابط سيرفر الـ Python الخاص بك على Render
+    // تذكر استبدال هذا الرابط برابط الـ Web Service الخاص بك بعد تفعيله على Render
+    const API_URL = "https://tah-backend.
